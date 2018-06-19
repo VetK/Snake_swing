@@ -4,8 +4,8 @@ package all.Objects;
 import all.MainSnake;
 
 public class Snake {
-    public int length = 2;
-    public int direction = 0;
+    public int length = 2;                          //длина змейки
+    public int direction = 0;                       //направление движения змейки
 
     public int[] sX = new int[300];
     public int[] sY = new int[300];
@@ -20,8 +20,8 @@ public class Snake {
     public void move(){
 
         for (int l = length; l>0; l--){
-            sX[1] = sX[l-1];
-            sY[1] = sY[l-1];
+            sX[l] = sX[l-1];
+            sY[l] = sY[l-1];
 
         }
 

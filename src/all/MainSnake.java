@@ -1,5 +1,6 @@
 package all;
 
+import all.Objects.Apple;
 import all.Objects.Snake;
 
 import javax.swing.*;
@@ -12,12 +13,14 @@ import java.awt.event.KeyEvent;
 public class MainSnake extends JPanel implements ActionListener {
 
     public static JFrame JFrame;
-    public static final int SCALE = 32;         //размер одной клетки в пиксилях
+    public static final int SCALE = 32;         //размер одной клетки в пикселях
     public static final int WIDTH = 20;         //количество клеток по ширине
     public static final int HEIGHT = 20;        //количество клеток по высоте
-    public static int speed = 5;
+    public static int speed = 10;
 
     Snake s = new Snake(5,5,5,5);
+    Apple apple = new Apple(Math.abs((int) (Math.random()*MainSnake.WIDTH-1)), Math.abs((int) (Math.random()*MainSnake.HEIGHT-1)));
+
     Timer timer = new Timer(1000/speed, this);
 
     public MainSnake(){
@@ -31,20 +34,28 @@ public class MainSnake extends JPanel implements ActionListener {
         g.fillRect(0,0, SCALE*WIDTH, SCALE*HEIGHT);
 
         for (int x=0; x<SCALE*WIDTH; x+=SCALE){           //прорисовка вертикальных линий
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.drawLine(x,0,x,SCALE*HEIGHT);
         }
 
         for (int y=0; y<SCALE*HEIGHT; y+=SCALE){          //прорисовка горизонтальных линий
-            g.setColor(Color.white);
+            g.setColor(Color.black);
             g.drawLine(0,y,SCALE*WIDTH,y);
         }
 
+        g.setColor(Color.red);                             //прорисовка яблока
+        g.fillOval(apple.posX*SCALE+3, apple.posY*SCALE+3, SCALE-6, SCALE-6);
 
-        for (int l = 0; l < s.length; l++){                //прорисовка змейки
+
+        for (int l = 1; l < s.length; l++){                //прорисовка змейки
             g.setColor(Color.green);
-            g.fillRect(s.sX[1]*SCALE+1, s.sY[1]*SCALE+1, SCALE-1, SCALE-1);
+            g.fillRect(s.sX[l]*SCALE+3, s.sY[l]*SCALE+3, SCALE-6, SCALE-6);
+
+            g.setColor(Color.white);
+            g.fillRect(s.sX[0]*SCALE+3, s.sY[0]*SCALE+3, SCALE-6, SCALE-6);
         }
+
+
 
     }
 
@@ -62,6 +73,22 @@ public class MainSnake extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e){
         s.move();
+        if((s.sX[0] == apple.posX) && (s.sY[0] == apple.posY)){             //увеличиваем длину змейки при съедании точки
+            apple.setRandomPosition();
+            s.length++;
+        }
+
+        for (int l = 1; l < s.length; l++){                                 //делаем чтобы точка не появлялась на теле змейки
+            if ((s.sX[l] == apple.posX) && (s.sY[l] == apple.posY))
+                apple.setRandomPosition();
+        }
+
+        for (int l = 1; l < s.length; l++){                                 //при врезании змейки в себя - игра останавливаеться
+            if ((s.sX[0] == s.sX[l]) && (s.sY[0] == s.sY[l]))
+                timer.stop();
+                //JOptionPane.showMessageDialog(null, "You are los!");
+        }
+
         repaint();                                                          //обновление, перерисовка
     }
 
