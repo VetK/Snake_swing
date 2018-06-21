@@ -63,9 +63,6 @@ public class MainSnake extends JPanel implements ActionListener {
         if((s.sX[0] == apple.posX) && (s.sY[0] == apple.posY)){             //увеличиваем длину змейки при съедании точки
             apple.setRandomPosition();
             s.length++;
-            speed +=20;
-            timer.stop();
-            timer.start();
         }
 
         for (int l = 1; l < s.length; l++){                                 //делаем чтобы точка не появлялась на теле змейки
@@ -96,5 +93,4 @@ public class MainSnake extends JPanel implements ActionListener {
         }
 
     }
-
 }
