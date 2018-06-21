@@ -4,7 +4,7 @@ package all.Objects;
 import all.MainSnake;
 
 public class Snake {
-    public int length = 2;                          //длина змейки
+    public int length = 5;                          //длина змейки
     public int direction = 0;                       //направление движения змейки
 
     public int[] sX = new int[300];

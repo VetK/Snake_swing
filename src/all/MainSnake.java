@@ -30,32 +30,19 @@ public class MainSnake extends JPanel implements ActionListener {
     }
 
     public void paint(Graphics g){                        //графический хуожник, который будет рисовать
-        g.setColor(Color.black);
-        g.fillRect(0,0, SCALE*WIDTH, SCALE*HEIGHT);
-
-        for (int x=0; x<SCALE*WIDTH; x+=SCALE){           //прорисовка вертикальных линий
-            g.setColor(Color.black);
-            g.drawLine(x,0,x,SCALE*HEIGHT);
-        }
-
-        for (int y=0; y<SCALE*HEIGHT; y+=SCALE){          //прорисовка горизонтальных линий
-            g.setColor(Color.black);
-            g.drawLine(0,y,SCALE*WIDTH,y);
-        }
+        g.setColor(Color.white);
+        g.fillRect(0,0, SCALE*WIDTH+2, SCALE*HEIGHT+2);
 
         g.setColor(Color.red);                             //прорисовка яблока
         g.fillOval(apple.posX*SCALE+3, apple.posY*SCALE+3, SCALE-6, SCALE-6);
-
 
         for (int l = 1; l < s.length; l++){                //прорисовка змейки
             g.setColor(Color.green);
             g.fillRect(s.sX[l]*SCALE+3, s.sY[l]*SCALE+3, SCALE-6, SCALE-6);
 
-            g.setColor(Color.white);
-            g.fillRect(s.sX[0]*SCALE+3, s.sY[0]*SCALE+3, SCALE-6, SCALE-6);
+            g.setColor(Color.orange);
+            g.fillOval(s.sX[0]*SCALE+3, s.sY[0]*SCALE+3, SCALE-6, SCALE-6);
         }
-
-
 
     }
 
@@ -76,6 +63,9 @@ public class MainSnake extends JPanel implements ActionListener {
         if((s.sX[0] == apple.posX) && (s.sY[0] == apple.posY)){             //увеличиваем длину змейки при съедании точки
             apple.setRandomPosition();
             s.length++;
+            speed +=20;
+            timer.stop();
+            timer.start();
         }
 
         for (int l = 1; l < s.length; l++){                                 //делаем чтобы точка не появлялась на теле змейки
@@ -84,11 +74,13 @@ public class MainSnake extends JPanel implements ActionListener {
         }
 
         for (int l = 1; l < s.length; l++){                                 //при врезании змейки в себя - игра останавливаеться
-            if ((s.sX[0] == s.sX[l]) && (s.sY[0] == s.sY[l]))
-                timer.stop();
-                //JOptionPane.showMessageDialog(null, "You are los!");
+            if ((s.sX[0] == s.sX[l]) && (s.sY[0] == s.sY[l])) {
+                JOptionPane.showMessageDialog(null, "You are los");
+                s.length = 2;
+                s.direction = 0;
+                apple.setRandomPosition();
+            }
         }
-
         repaint();                                                          //обновление, перерисовка
     }
 
